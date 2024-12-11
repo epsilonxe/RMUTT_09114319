@@ -48,16 +48,16 @@ Concepts of data structures, fundamental data structures, operations of data str
 
 | Topic                    |  CLass Materials                |
 |--------------------------|---------------------------------|
-| Introduction to algorithms|  [Download](./materials/intro.pdf) |
-| Selection sort            |  [Download](./materials/lecture_02.pdf) |
-| Recursion                 |  [Download](./materials/lecture_03.pdf) |
-| Quicksort                 |  [Download](./materials/lecture_04.pdf) |
-| Hash tables               |  [Download](./materials/lecture_05.pdf) |
-| Breadth-first search      |  [Download](./materials/lecture_06.pdf) |
-| Dijkstra's algorithm      |  [Download](./materials/lecture_07.pdf) |
-| Greedy algorithm          |  [Download](./materials/lecture_08.pdf) |
-| Dynamic programming       |  [Download](./materials/lecture_09.pdf) |
-| K-nearest neighbors       |  [Download](./materials/lecture_10.pdf) |
+| Introduction to algorithms|  [Lecture](./materials/intro.pdf) <br> [Workshop](./materials/workshop_01.ipynb)|
+| Selection sort            |  [Lecture](./materials/lecture_02.pdf) |
+| Recursion                 |  [Lecture](./materials/lecture_03.pdf) |
+| Quicksort                 |  [Lecture](./materials/lecture_04.pdf) |
+| Hash tables               |  [Lecture](./materials/lecture_05.pdf) |
+| Breadth-first search      |  [Lecture](./materials/lecture_06.pdf) |
+| Dijkstra's algorithm      |  [Lecture](./materials/lecture_07.pdf) |
+| Greedy algorithm          |  [Lecture](./materials/lecture_08.pdf) |
+| Dynamic programming       |  [Lecture](./materials/lecture_09.pdf) |
+| K-nearest neighbors       |  [Lecture](./materials/lecture_10.pdf) |
 
 
 
