@@ -48,8 +48,8 @@ Concepts of data structures, fundamental data structures, operations of data str
 
 | Topic                    |  CLass Materials                |
 |--------------------------|---------------------------------|
-| Introduction to algorithms|  [Lecture](./materials/intro.pdf) <br> [Workshop](./materials/workshop_01.ipynb)|
-| Selection sort            |  [Lecture](./materials/lecture_02.pdf) |
+| Introduction to algorithms|  [Lecture](./materials/intro.pdf) <br> [Workshop 01](./materials/workshop_01.ipynb)|
+| Selection sort            |  [Lecture](./materials/selection_sort.pdf)<br> [Workshop 02](./materials/workshop_02.ipynb) <br> [Workshop 03](./materials/workshop_03.ipynb) |
 | Recursion                 |  [Lecture](./materials/lecture_03.pdf) |
 | Quicksort                 |  [Lecture](./materials/lecture_04.pdf) |
 | Hash tables               |  [Lecture](./materials/lecture_05.pdf) |
