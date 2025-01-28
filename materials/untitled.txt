@@ -1,193 +1,186 @@
-Here’s the revised workshop with gentler introductions for each problem, including explanations where necessary:
+Here’s the updated workshop with **hints** for each problem, highlighting the **base case** and **recursive steps**:
 
 ---
 
-# Workshop: Recursion in Action
+# Workshop: Quicksort and Divide and Conquer
 
 ## Objective
-
-This workshop will help you:
-- Understand and implement recursive functions step-by-step.
-- Explore how recursion simplifies solving complex problems.
-- Apply recursion to real-world scenarios.
-
-The exercises include explanations to guide your understanding and build your confidence.
+- Reinforce understanding of Divide and Conquer techniques.
+- Solve challenging problems to deepen knowledge of recursion and Quicksort.
+- Apply concepts creatively to real-world scenarios.
 
 ---
 
-## Exercise 1: Recursive Sum of a List (20 minutes)
-
-### Introduction:
-The goal is to find the sum of all elements in a list. Recursion can simplify this by breaking the list into smaller parts:
-- Add the first element to the sum of the remaining list.
-- Stop when the list is empty (base case).
-
+## Problem 1: Find the Kth Smallest Element
 ### Problem:
-Write a recursive function to calculate the sum of all elements in a list.
-
-### Function Signature:
-```python
-def recursive_sum(arr):
-    # Your implementation here
-```
+Write a recursive function to find the **Kth smallest element** in an unsorted array using the Quicksort partitioning logic. Your function should not fully sort the array.
 
 ### Example Input and Output:
 ```python
-print(recursive_sum([1, 2, 3, 4, 5]))  # Output: 15
-print(recursive_sum([]))              # Output: 0
+arr = [7, 10, 4, 3, 20, 15]
+k = 3
+# Output: 7 (the 3rd smallest element)
 ```
+
+### Hint:
+- **Base case**: The array has only one element, and \( k = 1 \).
+- **Recursive steps**: Partition the array into `left` and `right` subarrays based on a pivot. Recursively determine if \( k \) lies in the left subarray, the pivot itself, or the right subarray.
 
 ---
 
 ### Suggested Solution:
 ```python
-def recursive_sum(arr):
-    if not arr:  # Base case: empty list
-        return 0
-    return arr[0] + recursive_sum(arr[1:])  # Recursive case
+def kth_smallest(arr, k):
+    pivot = arr[0]
+    left = [x for x in arr[1:] if x < pivot]
+    right = [x for x in arr[1:] if x >= pivot]
+    
+    if k <= len(left):
+        return kth_smallest(left, k)
+    elif k == len(left) + 1:
+        return pivot
+    else:
+        return kth_smallest(right, k - len(left) - 1)
 
 # Testing
-print(recursive_sum([1, 2, 3, 4, 5]))  # Output: 15
-print(recursive_sum([]))              # Output: 0
+print(kth_smallest([7, 10, 4, 3, 20, 15], 3))  # Output: 7
 ```
 
 ---
 
-## Exercise 2: Recursive Palindrome Check (30 minutes)
-
-### Introduction:
-A palindrome is a string that reads the same forward and backward (e.g., "radar" or "level"). Using recursion, you can:
-- Compare the first and last characters of the string.
-- Recursively check the remaining substring.
-- Stop when the string is empty or has one character (base case).
-
+## Problem 2: Largest Square Plots
 ### Problem:
-Write a recursive function to check if a string is a palindrome.
-
-### Function Signature:
-```python
-def is_palindrome(s):
-    # Your implementation here
-```
+A farmer has a rectangular field with dimensions \( l \) and \( w \). They want to divide the field into the largest possible square plots. Use recursion to calculate the size of the largest square plot.
 
 ### Example Input and Output:
 ```python
-print(is_palindrome("radar"))  # Output: True
-print(is_palindrome("hello"))  # Output: False
-print(is_palindrome(""))       # Output: True
+length = 1680
+width = 640
+# Output: 80 (largest square plot size)
 ```
+
+### Hint:
+- **Base case**: If one dimension is 0, return the other dimension.
+- **Recursive step**: Use the Euclidean algorithm: Reduce the problem to finding the largest square plot for \( \text{width} \) and \( \text{length} \% \text{width} \).
 
 ---
 
 ### Suggested Solution:
 ```python
-def is_palindrome(s):
-    if len(s) <= 1:  # Base case: string is empty or a single character
-        return True
-    if s[0] != s[-1]:  # Compare first and last characters
-        return False
-    return is_palindrome(s[1:-1])  # Recursive case: remove first and last characters
+def largest_square_plot(length, width):
+    if width == 0:
+        return length
+    return largest_square_plot(width, length % width)
 
 # Testing
-print(is_palindrome("radar"))  # Output: True
-print(is_palindrome("hello"))  # Output: False
-print(is_palindrome(""))       # Output: True
+print(largest_square_plot(1680, 640))  # Output: 80
 ```
 
 ---
 
-## Exercise 3: Towers of Hanoi (40 minutes)
-
-### Introduction:
-The Towers of Hanoi is a classic recursion problem. It involves moving \( n \) disks from a source rod to a target rod using an auxiliary rod, following these rules:
-1. Only one disk can be moved at a time.
-2. A disk can only be placed on top of a larger disk.
-3. The goal is to move all disks to the target rod.
-
+## Problem 3: Count Inversions in an Array
 ### Problem:
-Write a recursive function to solve the Towers of Hanoi problem.
-
-### Function Signature:
-```python
-def hanoi(n, source, target, auxiliary):
-    # Your implementation here
-```
+An inversion in an array is a pair of elements such that \( arr[i] > arr[j] \) for \( i < j \). Use a Divide and Conquer approach to count the number of inversions in an array.
 
 ### Example Input and Output:
 ```python
-hanoi(2, "A", "C", "B")
-# Expected Output:
-# Move disk 1 from A to B
-# Move disk 2 from A to C
-# Move disk 1 from B to C
+arr = [2, 4, 1, 3, 5]
+# Output: 3 (Inversions: (2, 1), (4, 1), (4, 3))
 ```
+
+### Hint:
+- **Base case**: If the array has 0 or 1 element, return 0 inversions.
+- **Recursive steps**:
+  1. Divide the array into two halves.
+  2. Count inversions in the left half, the right half, and while merging the two halves.
 
 ---
 
 ### Suggested Solution:
 ```python
-def hanoi(n, source, target, auxiliary):
-    if n == 1:  # Base case: one disk
-        print(f"Move disk 1 from {source} to {target}")
-        return
-    hanoi(n - 1, source, auxiliary, target)  # Move n-1 disks to auxiliary
-    print(f"Move disk {n} from {source} to {target}")  # Move nth disk to target
-    hanoi(n - 1, auxiliary, target, source)  # Move n-1 disks to target
+def count_inversions(arr):
+    def merge_and_count(left, right):
+        merged = []
+        i = j = count = 0
+        while i < len(left) and j < len(right):
+            if left[i] <= right[j]:
+                merged.append(left[i])
+                i += 1
+            else:
+                merged.append(right[j])
+                j += 1
+                count += len(left) - i
+        merged.extend(left[i:])
+        merged.extend(right[j:])
+        return merged, count
+    
+    def divide_and_count(arr):
+        if len(arr) < 2:
+            return arr, 0
+        mid = len(arr) // 2
+        left, left_count = divide_and_count(arr[:mid])
+        right, right_count = divide_and_count(arr[mid:])
+        merged, merge_count = merge_and_count(left, right)
+        return merged, left_count + right_count + merge_count
+    
+    _, total_count = divide_and_count(arr)
+    return total_count
 
 # Testing
-hanoi(2, "A", "C", "B")
+print(count_inversions([2, 4, 1, 3, 5]))  # Output: 3
 ```
 
 ---
 
-## Exercise 4: Recursive Fibonacci (30 minutes)
-
-### Introduction:
-The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones:
-\[
-F(0) = 0, \, F(1) = 1, \, F(n) = F(n-1) + F(n-2) \, \text{for} \, n > 1
-\]
-Example: \( 0, 1, 1, 2, 3, 5, 8, \dots \).
-
-Using recursion:
-- Base cases: \( F(0) = 0, F(1) = 1 \).
-- Recursive case: \( F(n) = F(n-1) + F(n-2) \).
-
+## Problem 4: Sort Strings by Length
 ### Problem:
-Write a recursive function to calculate the nth Fibonacci number.
-
-### Function Signature:
-```python
-def fibonacci(n):
-    # Your implementation here
-```
+Write a function that uses Quicksort to sort a list of strings by their lengths in ascending order.
 
 ### Example Input and Output:
 ```python
-print(fibonacci(5))  # Output: 5
-print(fibonacci(7))  # Output: 13
+arr = ["apple", "banana", "kiwi", "grape"]
+# Output: ["kiwi", "grape", "apple", "banana"]
 ```
+
+### Hint:
+- **Base case**: If the list has 0 or 1 string, it is already sorted.
+- **Recursive steps**: Partition the strings into `shorter` and `longer` based on the length of the pivot string, then recursively sort each partition.
 
 ---
 
 ### Suggested Solution:
 ```python
-def fibonacci(n):
-    if n <= 1:  # Base cases: F(0) = 0, F(1) = 1
-        return n
-    return fibonacci(n - 1) + fibonacci(n - 2)  # Recursive case
+def quicksort_by_length(strings):
+    if len(strings) < 2:
+        return strings
+    pivot = strings[0]
+    shorter = [s for s in strings[1:] if len(s) <= len(pivot)]
+    longer = [s for s in strings[1:] if len(s) > len(pivot)]
+    return quicksort_by_length(shorter) + [pivot] + quicksort_by_length(longer)
 
 # Testing
-print(fibonacci(5))  # Output: 5
-print(fibonacci(7))  # Output: 13
+print(quicksort_by_length(["apple", "banana", "kiwi", "grape"]))  # Output: ["kiwi", "grape", "apple", "banana"]
 ```
 
 ---
 
-## Submission
-- Ensure your code is well-commented and tested.
-- Submit your solutions in a Python script or Jupyter notebook.
+## Problem 5: Closest Pair of Points
+### Problem:
+Given a set of points in a 2D plane, find the closest pair of points using a Divide and Conquer approach.
+
+### Example Input and Output:
+```python
+points = [(2, 3), (12, 30), (40, 50), (5, 1), (12, 10), (3, 4)]
+# Output: Distance between closest points: 1.41
+```
+
+### Hint:
+- **Base case**: For 2 or 3 points, calculate distances directly.
+- **Recursive steps**:
+  1. Divide points into left and right halves based on their x-coordinates.
+  2. Find the closest pairs in the left and right halves.
+  3. Consider the closest pair across the dividing line.
 
 ---
 
-This revised workshop provides clear introductions and explanations for each problem, making it more approachable for students. Let me know if you need further adjustments! 😊
+These problems now have clear hints to guide students in identifying the base case and recursive steps. Let me know if you'd like additional edits! 😊
