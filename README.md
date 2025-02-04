@@ -52,7 +52,7 @@ Concepts of data structures, fundamental data structures, operations of data str
 | Selection sort            |  [Lecture](./materials/selection_sort.pdf)<br> [Workshop 02](./materials/workshop_02.ipynb) <br> [Workshop 03](./materials/workshop_03.ipynb) |
 | Recursion                 |  [Lecture](./materials/recursion.pdf) <br> [Workshop 04](./materials/workshop_04.ipynb) |
 | Quicksort                 |  [Lecture](./materials/quicksort.pdf) <br> [Workshop 05](./materials/workshop_05.ipynb) |
-| Hash tables               |  [Lecture](./materials/lecture_05.pdf) |
+| Hash tables               |  [Lecture](./materials/hash_tables.pdf) <br> [Workshop 06](./materials/workshop_06.ipynb) |
 | Breadth-first search      |  [Lecture](./materials/lecture_06.pdf) |
 | Dijkstra's algorithm      |  [Lecture](./materials/lecture_07.pdf) |
 | Greedy algorithm          |  [Lecture](./materials/lecture_08.pdf) |
