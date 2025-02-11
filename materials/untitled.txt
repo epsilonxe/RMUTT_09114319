@@ -1,186 +1,438 @@
-Here’s the updated workshop with **hints** for each problem, highlighting the **base case** and **recursive steps**:
+# **Workshop: Breadth-First Search (BFS) in Practice**  
+
+### **Objective**
+- Understand **how BFS explores graphs level by level**.
+- Implement BFS to solve **real-world problems**.
+- Reinforce **queue-based traversal and shortest-path applications**.
+- Solve **increasingly challenging problems**, ensuring deep comprehension.
 
 ---
 
-# Workshop: Quicksort and Divide and Conquer
+## **Problem 1: Implement BFS Traversal (20 min)**  
+### **Problem Statement**  
+Given an **undirected graph**, implement **BFS traversal** starting from a given node and print the order in which the nodes are visited.
 
-## Objective
-- Reinforce understanding of Divide and Conquer techniques.
-- Solve challenging problems to deepen knowledge of recursion and Quicksort.
-- Apply concepts creatively to real-world scenarios.
-
----
-
-## Problem 1: Find the Kth Smallest Element
-### Problem:
-Write a recursive function to find the **Kth smallest element** in an unsorted array using the Quicksort partitioning logic. Your function should not fully sort the array.
-
-### Example Input and Output:
+### **Example Input:**
 ```python
-arr = [7, 10, 4, 3, 20, 15]
-k = 3
-# Output: 7 (the 3rd smallest element)
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+start_node = 'A'
+```
+### **Example Output:**
+```python
+['A', 'B', 'C', 'D', 'E', 'F']
 ```
 
-### Hint:
-- **Base case**: The array has only one element, and \( k = 1 \).
-- **Recursive steps**: Partition the array into `left` and `right` subarrays based on a pivot. Recursively determine if \( k \) lies in the left subarray, the pivot itself, or the right subarray.
+### **Hint**
+- Use a **queue (FIFO)** for traversal.
+- Maintain a **visited set** to avoid re-exploration.
 
----
-
-### Suggested Solution:
+### **Suggested Solution**
 ```python
-def kth_smallest(arr, k):
-    pivot = arr[0]
-    left = [x for x in arr[1:] if x < pivot]
-    right = [x for x in arr[1:] if x >= pivot]
+from collections import deque
+
+def bfs_traversal(graph, start):
+    queue = deque([start])
+    visited = set([start])
+    order = []
+
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
     
-    if k <= len(left):
-        return kth_smallest(left, k)
-    elif k == len(left) + 1:
-        return pivot
-    else:
-        return kth_smallest(right, k - len(left) - 1)
+    return order
 
 # Testing
-print(kth_smallest([7, 10, 4, 3, 20, 15], 3))  # Output: 7
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+print(bfs_traversal(graph, 'A'))  # Output: ['A', 'B', 'C', 'D', 'E', 'F']
 ```
 
 ---
 
-## Problem 2: Largest Square Plots
-### Problem:
-A farmer has a rectangular field with dimensions \( l \) and \( w \). They want to divide the field into the largest possible square plots. Use recursion to calculate the size of the largest square plot.
+## **Problem 2: Find the Shortest Path Using BFS (30 min)**  
+### **Problem Statement**  
+Modify the **BFS traversal** to find the **shortest path** between two nodes in an **unweighted graph**.
 
-### Example Input and Output:
+### **Example Input:**
 ```python
-length = 1680
-width = 640
-# Output: 80 (largest square plot size)
+start = 'A'
+goal = 'F'
+```
+### **Example Output:**
+```python
+['A', 'C', 'F']
 ```
 
-### Hint:
-- **Base case**: If one dimension is 0, return the other dimension.
-- **Recursive step**: Use the Euclidean algorithm: Reduce the problem to finding the largest square plot for \( \text{width} \) and \( \text{length} \% \text{width} \).
+### **Hint**
+- Instead of just **visiting nodes**, track the **path taken**.
+- Use a **dictionary** to store **parent nodes**.
 
----
-
-### Suggested Solution:
+### **Suggested Solution**
 ```python
-def largest_square_plot(length, width):
-    if width == 0:
-        return length
-    return largest_square_plot(width, length % width)
+def bfs_shortest_path(graph, start, goal):
+    queue = deque([(start, [start])])
+    visited = set([start])
 
-# Testing
-print(largest_square_plot(1680, 640))  # Output: 80
-```
-
----
-
-## Problem 3: Count Inversions in an Array
-### Problem:
-An inversion in an array is a pair of elements such that \( arr[i] > arr[j] \) for \( i < j \). Use a Divide and Conquer approach to count the number of inversions in an array.
-
-### Example Input and Output:
-```python
-arr = [2, 4, 1, 3, 5]
-# Output: 3 (Inversions: (2, 1), (4, 1), (4, 3))
-```
-
-### Hint:
-- **Base case**: If the array has 0 or 1 element, return 0 inversions.
-- **Recursive steps**:
-  1. Divide the array into two halves.
-  2. Count inversions in the left half, the right half, and while merging the two halves.
-
----
-
-### Suggested Solution:
-```python
-def count_inversions(arr):
-    def merge_and_count(left, right):
-        merged = []
-        i = j = count = 0
-        while i < len(left) and j < len(right):
-            if left[i] <= right[j]:
-                merged.append(left[i])
-                i += 1
-            else:
-                merged.append(right[j])
-                j += 1
-                count += len(left) - i
-        merged.extend(left[i:])
-        merged.extend(right[j:])
-        return merged, count
+    while queue:
+        node, path = queue.popleft()
+        if node == goal:
+            return path
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
     
-    def divide_and_count(arr):
-        if len(arr) < 2:
-            return arr, 0
-        mid = len(arr) // 2
-        left, left_count = divide_and_count(arr[:mid])
-        right, right_count = divide_and_count(arr[mid:])
-        merged, merge_count = merge_and_count(left, right)
-        return merged, left_count + right_count + merge_count
+    return None  # No path found
+
+# Testing
+print(bfs_shortest_path(graph, 'A', 'F'))  # Output: ['A', 'C', 'F']
+```
+
+---
+
+## **Problem 3: BFS for Solving a Maze (30 min)**  
+### **Problem Statement**  
+You are given a **2D grid representing a maze**, where:
+- `0` represents an **open path**.
+- `1` represents a **wall**.
+- The **goal** is to find the shortest path from the **start position to the end position** using **BFS**.
+
+### **Example Input:**
+```python
+maze = [
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 1, 0],
+    [1, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0]
+]
+start = (0, 0)
+end = (4, 4)
+```
+### **Example Output:**
+```python
+Shortest path length: 8
+```
+
+### **Hint**
+- Represent the maze as a **graph** where each cell is a **node**.
+- Use **BFS** to find the shortest path.
+- Only move **up, down, left, right** if within bounds.
+
+### **Suggested Solution**
+```python
+def bfs_maze(maze, start, end):
+    rows, cols = len(maze), len(maze[0])
+    queue = deque([(start, 0)])
+    visited = set([start])
     
-    _, total_count = divide_and_count(arr)
-    return total_count
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
+    
+    while queue:
+        (x, y), steps = queue.popleft()
+        if (x, y) == end:
+            return steps
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < rows and 0 <= ny < cols and maze[nx][ny] == 0 and (nx, ny) not in visited:
+                visited.add((nx, ny))
+                queue.append(((nx, ny), steps + 1))
+    
+    return -1  # No path found
 
 # Testing
-print(count_inversions([2, 4, 1, 3, 5]))  # Output: 3
+print("Shortest path length:", bfs_maze(maze, start, end))  # Output: 8
 ```
 
 ---
 
-## Problem 4: Sort Strings by Length
-### Problem:
-Write a function that uses Quicksort to sort a list of strings by their lengths in ascending order.
+## **Problem 4: Social Network Friend Suggestion (25 min)**  
+### **Problem Statement**  
+Given a **social network graph**, implement **BFS-based friend suggestion**.  
+- **Input**: A graph where each node represents a person.
+- **Output**: Suggest **friends of friends** who are **not already friends**.
 
-### Example Input and Output:
+### **Example Input:**
 ```python
-arr = ["apple", "banana", "kiwi", "grape"]
-# Output: ["kiwi", "grape", "apple", "banana"]
+social_graph = {
+    'Alice': ['Bob', 'Claire'],
+    'Bob': ['Alice', 'Anuj'],
+    'Claire': ['Alice', 'Jonny'],
+    'Anuj': ['Bob'],
+    'Jonny': ['Claire'],
+    'Peggy': []
+}
+```
+### **Example Output:**
+```python
+Suggested friends for Alice: {'Jonny', 'Anuj'}
 ```
 
-### Hint:
-- **Base case**: If the list has 0 or 1 string, it is already sorted.
-- **Recursive steps**: Partition the strings into `shorter` and `longer` based on the length of the pivot string, then recursively sort each partition.
+### **Hint**
+- Use **BFS** to find **nodes exactly 2 levels away**.
+- Exclude **direct friends**.
 
----
-
-### Suggested Solution:
+### **Suggested Solution**
 ```python
-def quicksort_by_length(strings):
-    if len(strings) < 2:
-        return strings
-    pivot = strings[0]
-    shorter = [s for s in strings[1:] if len(s) <= len(pivot)]
-    longer = [s for s in strings[1:] if len(s) > len(pivot)]
-    return quicksort_by_length(shorter) + [pivot] + quicksort_by_length(longer)
+def suggest_friends(graph, person):
+    queue = deque([(person, 0)])
+    visited = set([person])
+    direct_friends = set(graph.get(person, []))
+    suggestions = set()
+
+    while queue:
+        node, level = queue.popleft()
+        if level == 2:
+            suggestions.add(node)
+        elif level < 2:
+            for friend in graph.get(node, []):
+                if friend not in visited and friend not in direct_friends:
+                    visited.add(friend)
+                    queue.append((friend, level + 1))
+
+    return suggestions
 
 # Testing
-print(quicksort_by_length(["apple", "banana", "kiwi", "grape"]))  # Output: ["kiwi", "grape", "apple", "banana"]
+print("Suggested friends for Alice:", suggest_friends(social_graph, 'Alice'))  # Output: {'Jonny', 'Anuj'}
 ```
 
 ---
 
-## Problem 5: Closest Pair of Points
-### Problem:
-Given a set of points in a 2D plane, find the closest pair of points using a Divide and Conquer approach.
+### **Revised Problem 1: Exploring Connected Countries Using BFS**  
 
-### Example Input and Output:
+### **Problem Statement**  
+A **graph** consists of **nodes (vertices)** representing entities and **edges** representing connections between them.  
+In this problem, each **node represents a country**, and an edge between two nodes means they share a **direct land border**.  
+
+**Your Task:**  
+- Implement **BFS** to explore a country’s neighboring countries level by level.
+- Given a starting country, return the **order in which countries are visited**.
+- Assume the graph is **undirected** (borders are bidirectional).
+
+---
+
+### **Example Graph (Countries and Borders)**
+Consider the following **graph** representing neighboring countries:
+
+```
+        Canada
+       /     \
+      USA --- Mexico
+       |       |
+     Brazil -- Argentina
+```
+
+- **Edges:** `{Canada-USA, USA-Mexico, USA-Brazil, Mexico-Argentina, Brazil-Argentina}`
+- **BFS from 'Canada' should visit nodes in level order**:  
+  **`Canada → USA → Mexico → Brazil → Argentina`**
+
+---
+
+### **Example Input (Graph as an Adjacency List)**
 ```python
-points = [(2, 3), (12, 30), (40, 50), (5, 1), (12, 10), (3, 4)]
-# Output: Distance between closest points: 1.41
+borders = {
+    'Canada': ['USA'],
+    'USA': ['Canada', 'Mexico', 'Brazil'],
+    'Mexico': ['USA', 'Argentina'],
+    'Brazil': ['USA', 'Argentina'],
+    'Argentina': ['Mexico', 'Brazil']
+}
+start_country = 'Canada'
 ```
 
-### Hint:
-- **Base case**: For 2 or 3 points, calculate distances directly.
-- **Recursive steps**:
-  1. Divide points into left and right halves based on their x-coordinates.
-  2. Find the closest pairs in the left and right halves.
-  3. Consider the closest pair across the dividing line.
+### **Example Output**
+```python
+['Canada', 'USA', 'Mexico', 'Brazil', 'Argentina']
+```
 
 ---
 
-These problems now have clear hints to guide students in identifying the base case and recursive steps. Let me know if you'd like additional edits! 😊
+### **Explanation of BFS Traversal**
+- Start at **'Canada'** → add to **queue**.
+- Visit all direct neighbors first: **'USA'**.
+- Move to the **next level** and visit all unvisited neighbors: **'Mexico', 'Brazil'**.
+- Finally, visit **'Argentina'**.
+
+### **How BFS Works (Step-by-Step Execution)**
+
+| Step | Queue Content       | Visited Countries |
+|------|--------------------|-------------------|
+| 1    | `['Canada']`       | `[]`              |
+| 2    | `['USA']`          | `['Canada']`      |
+| 3    | `['Mexico', 'Brazil']` | `['Canada', 'USA']`  |
+| 4    | `['Brazil', 'Argentina']` | `['Canada', 'USA', 'Mexico']` |
+| 5    | `['Argentina']`     | `['Canada', 'USA', 'Mexico', 'Brazil']` |
+| 6    | `[]` (Empty)       | `['Canada', 'USA', 'Mexico', 'Brazil', 'Argentina']` |
+
+---
+
+### **Hint**
+- Use a **queue (FIFO: First-In, First-Out)** to explore countries **level by level**.
+- Maintain a **visited set** to track explored countries.
+- Visit **all directly connected countries before exploring further neighbors**.
+
+---
+
+### **Suggested Solution**
+```python
+from collections import deque
+
+def bfs_explore_countries(graph, start):
+    queue = deque([start])
+    visited = set([start])
+    order = []
+
+    while queue:
+        country = queue.popleft()
+        order.append(country)
+        for neighbor in graph[country]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    
+    return order
+
+# Testing
+borders = {
+    'Canada': ['USA'],
+    'USA': ['Canada', 'Mexico', 'Brazil'],
+    'Mexico': ['USA', 'Argentina'],
+    'Brazil': ['USA', 'Argentina'],
+    'Argentina': ['Mexico', 'Brazil']
+}
+
+print(bfs_explore_countries(borders, 'Canada'))  
+# Output: ['Canada', 'USA', 'Mexico', 'Brazil', 'Argentina']
+```
+
+---
+
+### **Revised Problem 2: Finding the Shortest Path Between Countries Using BFS**  
+
+### **Problem Statement**  
+In this problem, you are given a **map of countries**, where each country is connected to its **neighboring countries by land**.  
+Your task is to **find the shortest route from one country to another** using **BFS**.  
+
+**Rules:**  
+- You can only **travel between directly connected countries** (i.e., neighbors).  
+- Your goal is to **return the shortest path** (sequence of countries) from the **start country to the target country**.  
+- If no path exists, return `None`.
+
+---
+
+### **Example Graph (Countries and Borders)**
+Consider the following **map** of connected countries:
+
+```
+        Canada
+       /     \
+      USA --- Mexico
+       |       |
+     Brazil -- Argentina
+```
+
+- **Edges:** `{Canada-USA, USA-Mexico, USA-Brazil, Mexico-Argentina, Brazil-Argentina}`
+- **Finding the shortest path from 'Canada' to 'Argentina' should return**:  
+  **`Canada → USA → Mexico → Argentina`**  
+  (instead of exploring unnecessary paths).
+
+---
+
+### **Example Input**
+```python
+borders = {
+    'Canada': ['USA'],
+    'USA': ['Canada', 'Mexico', 'Brazil'],
+    'Mexico': ['USA', 'Argentina'],
+    'Brazil': ['USA', 'Argentina'],
+    'Argentina': ['Mexico', 'Brazil']
+}
+
+start_country = 'Canada'
+destination_country = 'Argentina'
+```
+
+### **Example Output**
+```python
+['Canada', 'USA', 'Mexico', 'Argentina']
+```
+
+---
+
+### **Explanation of BFS Path Finding**
+1. **Start from 'Canada'**, add it to the queue: `['Canada']`
+2. Explore neighbors:  
+   - **Visit 'USA'**, update path → `['Canada', 'USA']`
+3. Explore next level:  
+   - **Visit 'Mexico' and 'Brazil'** → `['Canada', 'USA', 'Mexico']`  
+4. Finally, reach **'Argentina'** → **Shortest path found!**
+
+---
+
+### **Hint**
+- Modify BFS to **track paths**, not just visited countries.
+- Instead of just **storing countries in a queue**, **store the path taken**.
+- When the **destination is reached**, return the path.
+
+---
+
+### **Suggested Solution**
+```python
+from collections import deque
+
+def bfs_shortest_path(graph, start, goal):
+    queue = deque([(start, [start])])  # Store country and path
+    visited = set([start])
+
+    while queue:
+        country, path = queue.popleft()
+        if country == goal:
+            return path  # Return shortest path
+        for neighbor in graph[country]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    
+    return None  # No path found
+
+# Testing
+borders = {
+    'Canada': ['USA'],
+    'USA': ['Canada', 'Mexico', 'Brazil'],
+    'Mexico': ['USA', 'Argentina'],
+    'Brazil': ['USA', 'Argentina'],
+    'Argentina': ['Mexico', 'Brazil']
+}
+
+print(bfs_shortest_path(borders, 'Canada', 'Argentina'))  
+# Output: ['Canada', 'USA', 'Mexico', 'Argentina']
+```
+
+---
+
+### **Key Learning Points**
+✅ **BFS finds the shortest path in an unweighted graph**.  
+✅ **Using a queue to track both the country and the path taken**.  
+✅ **Ensuring the shortest route is returned instead of unnecessary paths**.
+
+---
+
+### **Final Notes**
+This **revision aligns Problem 2 with Problem 1**, using **countries as graph nodes** and **real-world travel scenarios**. Let me know if you need **further refinements!** 🚀
