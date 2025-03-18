@@ -55,9 +55,9 @@ Concepts of data structures, fundamental data structures, operations of data str
 | Hash tables               |  [Lecture](./materials/hash_tables.pdf) <br> [Workshop 06](./materials/workshop_06.ipynb) |
 | Breadth-first search      |  [Lecture](./materials/breadth_first_search.pdf) <br> [Workshop 07](./materials/workshop_07.ipynb) |
 | Dijkstra's algorithm      |  [Lecture](./materials/dijkstra.pdf) <br> [Workshop 08](./materials/workshop_08.ipynb) |
-| Greedy algorithm          |  [Lecture](./materials/lecture_09.pdf) <br> [Workshop 09](./materials/workshop_09.ipynb) |
+<!-- | Greedy algorithm          |  [Lecture](./materials/lecture_09.pdf) <br> [Workshop 09](./materials/workshop_09.ipynb) |
 | Dynamic programming       |  [Lecture](./materials/lecture_10.pdf) <br> [Workshop 10](./materials/workshop_10.ipynb) |
-| K-nearest neighbors       |  [Lecture](./materials/lecture_11.pdf) <br> [Workshop 11](./materials/workshop_11.ipynb) |
+| K-nearest neighbors       |  [Lecture](./materials/lecture_11.pdf) <br> [Workshop 11](./materials/workshop_11.ipynb) | -->
 
 
 
